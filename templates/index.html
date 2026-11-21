@@ -1,0 +1,1916 @@
+```html
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>InnerVoice — Speak freely. We listen deeply</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+
+<body>
+
+<!-- =========================================================
+     CRISIS BANNER
+     ========================================================= -->
+
+<div id="crisisBanner" class="crisis-banner hidden">
+
+  <span class="crisis-icon">🆘</span>
+
+  <span class="crisis-msg">
+    We noticed something concerning.
+    <strong>You are not alone.</strong>
+    Please reach out immediately.
+  </span>
+
+  <div class="crisis-actions">
+
+    <a href="tel:9152987821" class="crisis-btn">
+      📞 iCall: 9152987821
+    </a>
+
+  </div>
+
+  <button
+    class="crisis-close"
+    onclick="document.getElementById('crisisBanner').classList.add('hidden')"
+  >
+    ✕
+  </button>
+
+</div>
+
+
+<!-- Background -->
+
+<div class="bg-blob blob1"></div>
+<div class="bg-blob blob2"></div>
+<div class="bg-blob blob3"></div>
+<div class="grain"></div>
+
+
+<!-- =========================================================
+     BREATHING EXERCISE
+     ========================================================= -->
+
+<div id="breathingOverlay" class="breathing-overlay hidden">
+
+  <div class="breathing-modal">
+
+    <button
+      class="breathing-close"
+      onclick="closeBreathing()"
+    >
+      ✕
+    </button>
+
+    <h3 class="breathing-title">
+      🫁 Box Breathing Exercise
+    </h3>
+
+    <p class="breathing-sub">
+      Follow the circle. This takes only 2 minutes.
+    </p>
+
+    <div class="breathing-circle-wrap">
+
+      <div
+        class="breathing-ring"
+        id="breathingRing"
+      ></div>
+
+      <div class="breathing-circle">
+
+        <span
+          class="breath-phase"
+          id="breathPhase"
+        >
+          Ready
+        </span>
+
+        <span
+          class="breath-count"
+          id="breathCount"
+        >
+          4
+        </span>
+
+      </div>
+
+    </div>
+
+    <p
+      class="breathing-instruction"
+      id="breathInstruction"
+    >
+      Press Start when you're ready
+    </p>
+
+    <button
+      class="breathing-start-btn"
+      id="breathStartBtn"
+      onclick="startBreathing()"
+    >
+      Start
+    </button>
+
+    <p class="breathing-note">
+      Inhale 4s → Hold 4s → Exhale 4s → Hold 4s
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN CONTAINER
+     ========================================================= -->
+
+<div class="container">
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="header">
+
+  <div class="header-row">
+
+    <div class="logo">
+
+      <span class="logo-brain">
+        💜
+      </span>
+
+      <span class="logo-text">
+        Inner<em>Voice</em>
+      </span>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        class="icon-btn"
+        onclick="openBreathing()"
+        title="Breathing exercise"
+      >
+        🫁
+      </button>
+
+
+      <button
+        class="theme-toggle"
+        onclick="toggleTheme()"
+        title="Toggle theme"
+      >
+
+        <span class="toggle-track">
+
+          <span class="toggle-thumb">
+            <span id="toggleEmoji">🌙</span>
+          </span>
+
+        </span>
+
+        <span id="toggleLabel">
+          Dark
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <p
+    class="tagline typing-text"
+    id="typingTagline"
+  ></p>
+
+
+  <div class="stat-pills">
+
+    <span class="pill pill-green">
+      😊 Non-Stress
+    </span>
+
+    <span class="pill pill-yellow">
+      😰 Stress
+    </span>
+
+    <span class="pill pill-purple">
+      😔 Depression
+    </span>
+
+    <span class="pill pill-red">
+      🆘 Suicidal
+    </span>
+
+  </div>
+
+</header>
+
+
+<!-- =========================================================
+     INPUT CARD
+     ========================================================= -->
+
+<section class="card input-card">
+
+  <div class="input-header">
+
+    <label class="input-label">
+      Share your thoughts
+    </label>
+
+    <span class="input-hint">
+      Ctrl + Enter to analyze
+    </span>
+
+  </div>
+
+
+  <textarea
+    id="userText"
+    placeholder="Write freely... each sentence will be analyzed separately.
+
+Example: I feel so overwhelmed lately. Nothing makes me happy. I had a great day today though."
+  ></textarea>
+
+
+  <div class="input-footer">
+
+    <div class="char-count">
+
+      <span id="charCount">0</span>
+      chars ·
+
+      <span id="sentCount">0</span>
+      sentences
+
+    </div>
+
+
+    <button
+      id="analyzeBtn"
+      onclick="analyze()"
+    >
+
+      <span>
+        Analyze My Feelings
+      </span>
+
+      <span class="btn-arrow">
+        →
+      </span>
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     LOADER
+     ========================================================= -->
+
+<div
+  id="loader"
+  class="loader hidden"
+>
+
+  <div class="loader-dots">
+
+    <span></span>
+    <span></span>
+    <span></span>
+
+  </div>
+
+  <p>
+    Reading between the lines...
+  </p>
+
+</div>
+
+
+<!-- =========================================================
+     RESULTS
+     ========================================================= -->
+
+<div id="results" class="hidden">
+
+
+<!-- Summary -->
+
+<div
+  class="summary-bar"
+  id="summaryBar"
+></div>
+
+
+<!-- =========================================================
+     SENTENCE ANALYSIS
+     ========================================================= -->
+
+<section class="card">
+
+  <h2 class="section-title">
+
+    <span>📝</span>
+
+    Sentence Analysis
+
+    <span
+      class="line-count-badge"
+      id="lineCountBadge"
+    ></span>
+
+  </h2>
+
+
+  <div id="lineResults"></div>
+
+</section>
+
+
+<!-- =========================================================
+     PIE CHART
+     ========================================================= -->
+
+<section class="card chart-card">
+
+  <h2 class="section-title">
+
+    <span>📊</span>
+
+    Emotional Breakdown
+
+  </h2>
+
+
+  <div class="chart-wrapper">
+
+    <div class="pie-wrap">
+
+      <canvas
+        id="pieChart"
+        width="270"
+        height="270"
+      ></canvas>
+
+    </div>
+
+
+    <div
+      id="legend"
+      class="legend"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONCLUSION
+     ========================================================= -->
+
+<section
+  id="conclusionCard"
+  class="card conclusion-card"
+>
+
+  <div class="conclusion-left">
+
+    <div
+      class="conclusion-icon"
+      id="conclusionIcon"
+    ></div>
+
+    <div
+      class="conclusion-pulse"
+      id="conclusionPulse"
+    ></div>
+
+  </div>
+
+
+  <div class="conclusion-body">
+
+    <div
+      class="conclusion-tag"
+      id="conclusionTag"
+    >
+      Overall Assessment
+    </div>
+
+
+    <h2
+      class="conclusion-title"
+      id="conclusionTitle"
+    ></h2>
+
+
+    <p
+      class="conclusion-text"
+      id="conclusionText"
+    ></p>
+
+
+    <!-- Text To Speech -->
+
+    <button
+      id="listenBtn"
+      class="listen-btn"
+      onclick="speakConclusion()"
+      style="
+        margin:10px 0 16px;
+        padding:8px 16px;
+        border-radius:999px;
+        border:1px solid currentColor;
+        background:transparent;
+        color:inherit;
+        cursor:pointer;
+        font-size:0.9rem;
+      "
+    >
+      🔊 Listen
+    </button>
+
+
+    <!-- Tips -->
+
+    <div
+      class="tips-box"
+      id="tipsBox"
+    ></div>
+
+
+    <!-- Helpline -->
+
+    <div
+      class="helpline-box"
+      id="helplineBox"
+      style="display:none"
+    >
+
+      <span>📞</span>
+
+      <span>
+        iCall (India):
+        <strong>9152987821</strong>
+        &nbsp;|&nbsp;
+        Vandrevala:
+        <strong>1860-2662-345</strong>
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     RESET
+     ========================================================= -->
+
+<div
+  class="reset-row"
+  style="margin-top:20px;text-align:center;"
+>
+
+  <button
+    class="reset-btn"
+    onclick="resetAll()"
+  >
+    ↺ New Analysis
+  </button>
+
+</div>
+
+
+</div>
+</div>
+
+
+<!-- PDF AREA -->
+
+<div
+  id="pdfArea"
+  class="pdf-area hidden"
+></div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+let isDark = true;
+let lastPieData = null;
+let lastData = null;
+
+
+/* =========================================================
+   TYPING TAGLINE
+   ========================================================= */
+
+const taglines = [
+
+  "Speak freely. We listen deeply.",
+
+  "Every feeling has a name.",
+
+  "Your words, understood.",
+
+  "AI that reads between the lines."
+
+];
+
+let tIdx = 0;
+let cIdx = 0;
+let deleting = false;
+
+const tagEl =
+  document.getElementById("typingTagline");
+
+
+function typeTag() {
+
+  const str = taglines[tIdx];
+
+  if (!deleting) {
+
+    tagEl.textContent =
+      str.slice(0, ++cIdx);
+
+    if (cIdx === str.length) {
+
+      deleting = true;
+
+      setTimeout(typeTag, 1800);
+
+      return;
+    }
+
+  } else {
+
+    tagEl.textContent =
+      str.slice(0, --cIdx);
+
+    if (cIdx === 0) {
+
+      deleting = false;
+
+      tIdx =
+        (tIdx + 1) % taglines.length;
+
+    }
+
+  }
+
+  setTimeout(
+    typeTag,
+    deleting ? 40 : 60
+  );
+}
+
+typeTag();
+
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+function toggleTheme() {
+
+  isDark = !isDark;
+
+  document.documentElement
+    .setAttribute(
+      "data-theme",
+      isDark ? "dark" : "light"
+    );
+
+  document.getElementById(
+    "toggleEmoji"
+  ).textContent =
+    isDark ? "🌙" : "☀️";
+
+  document.getElementById(
+    "toggleLabel"
+  ).textContent =
+    isDark ? "Dark" : "Light";
+
+  if (lastPieData) {
+
+    drawPie(lastPieData);
+
+  }
+
+}
+
+
+/* =========================================================
+   TEXT COUNTERS
+   ========================================================= */
+
+const ta =
+  document.getElementById("userText");
+
+
+ta.addEventListener("input", () => {
+
+  document.getElementById(
+    "charCount"
+  ).textContent =
+    ta.value.length;
+
+
+  document.getElementById(
+    "sentCount"
+  ).textContent =
+
+    ta.value
+      .split(/[.!?\n]+/)
+      .filter(
+        x => x.trim().length > 5
+      )
+      .length;
+
+});
+
+
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   ANALYZE
+   ========================================================= */
+
+async function analyze() {
+
+  const text =
+    ta.value.trim();
+
+
+  if (!text) {
+
+    alert(
+      "Please enter some text first."
+    );
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "loader"
+  ).classList.remove("hidden");
+
+
+  document.getElementById(
+    "results"
+  ).classList.add("hidden");
+
+
+  document.getElementById(
+    "crisisBanner"
+  ).classList.add("hidden");
+
+
+  document.getElementById(
+    "analyzeBtn"
+  ).disabled = true;
+
+
+  try {
+
+    const res =
+      await fetch(
+        "/analyze",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              text: text
+            })
+        }
+      );
+
+
+    const data =
+      await res.json();
+
+
+    if (data.error) {
+
+      alert(data.error);
+
+      return;
+
+    }
+
+
+    lastPieData =
+      data.pie;
+
+    lastData =
+      data;
+
+
+    renderResults(data);
+
+
+    if (data.is_crisis) {
+
+      document
+        .getElementById("crisisBanner")
+        .classList
+        .remove("hidden");
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+  }
+
+  catch (e) {
+
+    console.error(e);
+
+    alert(
+      "Server error. Make sure Flask is running."
+    );
+
+  }
+
+  finally {
+
+    document.getElementById(
+      "loader"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+      "analyzeBtn"
+    ).disabled = false;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+   ========================================================= */
+
+function renderResults(data) {
+
+
+  /* -------------------------------------------------------
+     SUMMARY BAR
+     ------------------------------------------------------- */
+
+  const bar =
+    document.getElementById(
+      "summaryBar"
+    );
+
+  bar.innerHTML = "";
+
+
+  data.pie.forEach(p => {
+
+    const s =
+      document.createElement("div");
+
+    s.className =
+      "summary-seg";
+
+    s.style.cssText =
+      `width:${p.percentage}%;background:${p.color}`;
+
+    s.title =
+      `${p.label}: ${p.percentage}%`;
+
+    bar.appendChild(s);
+
+  });
+
+
+  document.getElementById(
+    "lineCountBadge"
+  ).textContent =
+    `${data.total_lines} sentences`;
+
+
+  /* -------------------------------------------------------
+     SENTENCE RESULTS + XAI
+     ------------------------------------------------------- */
+
+  const cont =
+    document.getElementById(
+      "lineResults"
+    );
+
+  cont.innerHTML = "";
+
+
+  data.lines.forEach((line, i) => {
+
+    const d =
+      document.createElement("div");
+
+    d.className =
+      "line-item";
+
+    d.style.animationDelay =
+      `${i * 0.06}s`;
+
+
+    /* =====================================================
+       XAI EXPLANATION
+       ===================================================== */
+
+    let explanationHTML = "";
+
+
+    if (
+      line.explanation &&
+      line.explanation.length > 0
+    ) {
+
+      const words =
+        line.explanation
+          .map(item => {
+
+            const positive =
+              item.weight > 0;
+
+
+            const background =
+              positive
+                ? `${line.color}18`
+                : "#64748b18";
+
+
+            const border =
+              positive
+                ? `${line.color}55`
+                : "#64748b55";
+
+
+            const textColor =
+              positive
+                ? line.color
+                : "#94a3b8";
+
+
+            const sign =
+              positive ? "+" : "";
+
+
+            return `
+
+              <span
+                class="xai-word"
+                style="
+                  background:${background};
+                  color:${textColor};
+                  border:1px solid ${border};
+                "
+                title="Model influence: ${sign}${item.weight}"
+              >
+
+                ${escapeHTML(item.word)}
+
+              </span>
+
+            `;
+
+          })
+          .join("");
+
+
+      explanationHTML = `
+
+        <div class="xai-box">
+
+          <div class="xai-title">
+            🔍 Why this prediction?
+          </div>
+
+          <div class="xai-description">
+            Words/features that influenced the model's prediction:
+          </div>
+
+          <div class="xai-words">
+
+            ${words}
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+    else {
+
+      explanationHTML = `
+
+        <div class="xai-box">
+
+          <div class="xai-title">
+            🔍 Explainable AI
+          </div>
+
+          <div class="xai-description">
+            No significant word-level contribution was detected.
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* -----------------------------------------------------
+       SENTENCE CARD
+       ----------------------------------------------------- */
+
+    d.innerHTML = `
+
+      <div
+        class="line-number"
+        style="
+          background:${line.color}22;
+          color:${line.color};
+          border:1px solid ${line.color}55
+        "
+      >
+        ${i + 1}
+      </div>
+
+
+      <div class="line-content">
+
+        <div class="line-text">
+
+          ${escapeHTML(line.text)}
+
+        </div>
+
+
+        <div class="intensity-bar-track">
+
+          <div
+            class="intensity-bar-fill"
+            style="
+              width:${line.confidence}%;
+              background:${line.color}
+            "
+            title="${line.confidence}% confidence"
+          ></div>
+
+        </div>
+
+
+        ${explanationHTML}
+
+      </div>
+
+
+      <div class="line-right">
+
+        <div
+          class="line-badge"
+          style="
+            background:${line.color}18;
+            color:${line.color};
+            border:1px solid ${line.color}40
+          "
+        >
+
+          ${line.icon}
+          ${escapeHTML(line.label)}
+
+        </div>
+
+
+        <div
+          class="confidence-score"
+          style="color:${line.color}"
+        >
+
+          ${line.confidence}% confident
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    cont.appendChild(d);
+
+  });
+
+
+  /* -------------------------------------------------------
+     PIE CHART
+     ------------------------------------------------------- */
+
+  drawPie(data.pie);
+
+
+  /* -------------------------------------------------------
+     LEGEND
+     ------------------------------------------------------- */
+
+  const leg =
+    document.getElementById(
+      "legend"
+    );
+
+  leg.innerHTML = "";
+
+
+  data.pie.forEach(p => {
+
+    leg.innerHTML += `
+
+      <div class="legend-item">
+
+        <span
+          class="legend-dot"
+          style="
+            background:${p.color};
+            box-shadow:0 0 8px ${p.color}70
+          "
+        ></span>
+
+
+        <span class="legend-label">
+
+          ${p.icon}
+          ${escapeHTML(p.label)}
+
+        </span>
+
+
+        <div class="legend-right">
+
+          <span
+            class="legend-pct"
+            style="color:${p.color}"
+          >
+            ${p.percentage}%
+          </span>
+
+
+          <span class="legend-count">
+
+            ${p.count}
+            line${p.count > 1 ? "s" : ""}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="legend-bar-track">
+
+        <div
+          class="legend-bar-fill"
+          style="
+            width:${p.percentage}%;
+            background:${p.color}88
+          "
+        ></div>
+
+      </div>
+
+    `;
+
+  });
+
+
+  /* -------------------------------------------------------
+     CONCLUSION
+     ------------------------------------------------------- */
+
+  const card =
+    document.getElementById(
+      "conclusionCard"
+    );
+
+
+  card.style.setProperty(
+    "--cc",
+    data.color
+  );
+
+
+  document.getElementById(
+    "conclusionIcon"
+  ).textContent =
+    data.icon;
+
+
+  document.getElementById(
+    "conclusionPulse"
+  ).style.background =
+    data.color;
+
+
+  document.getElementById(
+    "conclusionTitle"
+  ).textContent =
+    data.dominant;
+
+
+  document.getElementById(
+    "conclusionTitle"
+  ).style.color =
+    data.color;
+
+
+  document.getElementById(
+    "conclusionText"
+  ).textContent =
+    data.conclusion;
+
+
+  document.getElementById(
+    "conclusionTag"
+  ).style.cssText =
+    `color:${data.color};border-color:${data.color}44`;
+
+
+  /* -------------------------------------------------------
+     TEXT TO SPEECH
+     ------------------------------------------------------- */
+
+  window.speechSynthesis.cancel();
+
+
+  const autoUtterance =
+    new SpeechSynthesisUtterance(
+      data.voice_conclusion
+    );
+
+
+  autoUtterance.lang =
+    "en-IN";
+
+  autoUtterance.rate =
+    0.9;
+
+
+  const listenBtn =
+    document.getElementById(
+      "listenBtn"
+    );
+
+
+  if (listenBtn) {
+
+    listenBtn.textContent =
+      "⏹️ Stop";
+
+  }
+
+
+  autoUtterance.onend = () => {
+
+    if (listenBtn) {
+
+      listenBtn.textContent =
+        "🔊 Listen";
+
+    }
+
+  };
+
+
+  autoUtterance.onerror = () => {
+
+    if (listenBtn) {
+
+      listenBtn.textContent =
+        "🔊 Listen";
+
+    }
+
+  };
+
+
+  window.speechSynthesis.speak(
+    autoUtterance
+  );
+
+
+  /* -------------------------------------------------------
+     TIPS
+     ------------------------------------------------------- */
+
+  const tips =
+    document.getElementById(
+      "tipsBox"
+    );
+
+
+  tips.innerHTML =
+
+    `<div class="tips-title">
+      💡 What you can do right now
+    </div>` +
+
+    data.tips
+      .map(
+        t =>
+          `<div class="tip-item">
+            ${escapeHTML(t)}
+          </div>`
+      )
+      .join("");
+
+
+  /* -------------------------------------------------------
+     HELPLINE
+     ------------------------------------------------------- */
+
+  document.getElementById(
+    "helplineBox"
+  ).style.display =
+
+    (
+      data.dominant === "Suicidal" ||
+      data.dominant === "Depression"
+    )
+      ? "flex"
+      : "none";
+
+
+  /* -------------------------------------------------------
+     SHOW RESULTS
+     ------------------------------------------------------- */
+
+  document.getElementById(
+    "results"
+  ).classList.remove("hidden");
+
+
+  /* -------------------------------------------------------
+     BREATHING
+     ------------------------------------------------------- */
+
+  if (
+    data.dominant === "Stress" ||
+    data.dominant === "Depression"
+  ) {
+
+    setTimeout(
+      () => openBreathing(),
+      1200
+    );
+
+  }
+
+
+  setTimeout(
+    () =>
+      document
+        .getElementById("results")
+        .scrollIntoView({
+          behavior: "smooth"
+        }),
+    100
+  );
+
+}
+
+
+/* =========================================================
+   PIE CHART
+   ========================================================= */
+
+function drawPie(slices) {
+
+  const canvas =
+    document.getElementById(
+      "pieChart"
+    );
+
+  const ctx =
+    canvas.getContext("2d");
+
+
+  const cx = 135;
+  const cy = 135;
+  const r = 108;
+
+
+  ctx.clearRect(
+    0,
+    0,
+    270,
+    270
+  );
+
+
+  const hole =
+    isDark
+      ? "#0d0d1a"
+      : "#f5f3ff";
+
+
+  const ctxt =
+    isDark
+      ? "#e2e8f0"
+      : "#1e1b4b";
+
+
+  const csub =
+    isDark
+      ? "#94a3b8"
+      : "#6b7280";
+
+
+  const stroke =
+    isDark
+      ? "#0d0d1a"
+      : "#ffffff";
+
+
+  const total =
+    slices.reduce(
+      (s, p) => s + p.count,
+      0
+    );
+
+
+  let start =
+    -Math.PI / 2;
+
+
+  slices.forEach(s => {
+
+    const angle =
+      (s.count / total) *
+      2 *
+      Math.PI;
+
+
+    ctx.shadowColor =
+      s.color;
+
+    ctx.shadowBlur =
+      14;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      cx,
+      cy
+    );
+
+
+    ctx.arc(
+      cx,
+      cy,
+      r,
+      start,
+      start + angle
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fillStyle =
+      s.color;
+
+    ctx.fill();
+
+
+    ctx.shadowBlur = 0;
+
+
+    ctx.strokeStyle =
+      stroke;
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+
+
+    if (s.percentage >= 8) {
+
+      const mid =
+        start + angle / 2;
+
+
+      ctx.fillStyle =
+        "#fff";
+
+
+      ctx.font =
+        "bold 13px 'DM Sans'";
+
+
+      ctx.textAlign =
+        "center";
+
+
+      ctx.textBaseline =
+        "middle";
+
+
+      ctx.fillText(
+        `${s.percentage}%`,
+        cx +
+          r *
+          0.66 *
+          Math.cos(mid),
+        cy +
+          r *
+          0.66 *
+          Math.sin(mid)
+      );
+
+    }
+
+
+    start += angle;
+
+  });
+
+
+  /* Center hole */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    cx,
+    cy,
+    r * 0.42,
+    0,
+    2 * Math.PI
+  );
+
+  ctx.fillStyle =
+    hole;
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    ctxt;
+
+  ctx.font =
+    "600 14px 'Playfair Display'";
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+
+  ctx.fillText(
+    "Emotions",
+    cx,
+    cy - 11
+  );
+
+
+  ctx.font =
+    "13px 'DM Sans'";
+
+  ctx.fillStyle =
+    csub;
+
+
+  ctx.fillText(
+    `${total} lines`,
+    cx,
+    cy + 11
+  );
+
+}
+
+
+/* =========================================================
+   BREATHING EXERCISE
+   ========================================================= */
+
+let breathTimer = null;
+let breathRunning = false;
+
+
+const phases = [
+
+  {
+    name: "Inhale",
+    dur: 4,
+    color: "#22c55e"
+  },
+
+  {
+    name: "Hold",
+    dur: 4,
+    color: "#f59e0b"
+  },
+
+  {
+    name: "Exhale",
+    dur: 4,
+    color: "#6366f1"
+  },
+
+  {
+    name: "Hold",
+    dur: 4,
+    color: "#94a3b8"
+  }
+
+];
+
+
+function openBreathing() {
+
+  document
+    .getElementById(
+      "breathingOverlay"
+    )
+    .classList
+    .remove("hidden");
+
+}
+
+
+function closeBreathing() {
+
+  document
+    .getElementById(
+      "breathingOverlay"
+    )
+    .classList
+    .add("hidden");
+
+
+  clearInterval(
+    breathTimer
+  );
+
+
+  breathRunning = false;
+
+
+  document.getElementById(
+    "breathStartBtn"
+  ).textContent =
+    "Start";
+
+
+  document.getElementById(
+    "breathPhase"
+  ).textContent =
+    "Ready";
+
+
+  document.getElementById(
+    "breathCount"
+  ).textContent =
+    "4";
+
+
+  document.getElementById(
+    "breathInstruction"
+  ).textContent =
+    "Press Start when you're ready";
+
+
+  document.getElementById(
+    "breathingRing"
+  ).style.animation =
+    "none";
+
+}
+
+
+function startBreathing() {
+
+  if (breathRunning) {
+
+    closeBreathing();
+
+    return;
+
+  }
+
+
+  breathRunning = true;
+
+
+  document.getElementById(
+    "breathStartBtn"
+  ).textContent =
+    "Stop";
+
+
+  let pi = 0;
+
+  let count =
+    phases[0].dur;
+
+
+  document.getElementById(
+    "breathPhase"
+  ).textContent =
+    phases[0].name;
+
+
+  document.getElementById(
+    "breathCount"
+  ).textContent =
+    count;
+
+
+  document.getElementById(
+    "breathingRing"
+  ).style.borderColor =
+    phases[0].color;
+
+
+  breathTimer =
+    setInterval(() => {
+
+      count--;
+
+
+      if (count <= 0) {
+
+        pi =
+          (pi + 1) % 4;
+
+        count =
+          phases[pi].dur;
+
+      }
+
+
+      document.getElementById(
+        "breathPhase"
+      ).textContent =
+        phases[pi].name;
+
+
+      document.getElementById(
+        "breathCount"
+      ).textContent =
+        count;
+
+
+      document.getElementById(
+        "breathingRing"
+      ).style.borderColor =
+        phases[pi].color;
+
+
+      const instr = {
+
+        Inhale:
+          "Breathe in slowly through your nose...",
+
+        Hold:
+          "Hold your breath gently...",
+
+        Exhale:
+          "Exhale slowly through your mouth..."
+
+      };
+
+
+      document.getElementById(
+        "breathInstruction"
+      ).textContent =
+        instr[phases[pi].name] ||
+        "Hold...";
+
+    }, 1000);
+
+}
+
+
+/* =========================================================
+   TEXT TO SPEECH
+   ========================================================= */
+
+let currentUtterance = null;
+
+
+function speakConclusion() {
+
+  const btn =
+    document.getElementById(
+      "listenBtn"
+    );
+
+
+  if (!btn) return;
+
+
+  if (
+    window.speechSynthesis.speaking
+  ) {
+
+    window.speechSynthesis.cancel();
+
+    btn.textContent =
+      "🔊 Listen";
+
+    return;
+
+  }
+
+
+  if (
+    !lastData ||
+    !lastData.voice_conclusion
+  ) {
+
+    return;
+
+  }
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      lastData.voice_conclusion
+    );
+
+
+  utterance.lang =
+    "en-IN";
+
+
+  utterance.rate =
+    0.9;
+
+
+  utterance.onend = () => {
+
+    btn.textContent =
+      "🔊 Listen";
+
+  };
+
+
+  utterance.onerror = () => {
+
+    btn.textContent =
+      "🔊 Listen";
+
+  };
+
+
+  currentUtterance =
+    utterance;
+
+
+  btn.textContent =
+    "⏹️ Stop";
+
+
+  window.speechSynthesis.speak(
+    utterance
+  );
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+function resetAll() {
+
+  window.speechSynthesis.cancel();
+
+
+  ta.value = "";
+
+
+  document.getElementById(
+    "charCount"
+  ).textContent =
+    "0";
+
+
+  document.getElementById(
+    "sentCount"
+  ).textContent =
+    "0";
+
+
+  document.getElementById(
+    "results"
+  ).classList.add("hidden");
+
+
+  document.getElementById(
+    "crisisBanner"
+  ).classList.add("hidden");
+
+
+  document.getElementById(
+    "listenBtn"
+  ).textContent =
+    "🔊 Listen";
+
+
+  lastData = null;
+  lastPieData = null;
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =========================================================
+   CTRL + ENTER
+   ========================================================= */
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if (
+      e.ctrlKey &&
+      e.key === "Enter"
+    ) {
+
+      analyze();
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
+```
